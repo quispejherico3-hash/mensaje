@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Para Jocelyn</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    }
+
+    body {
+      background: #0d0a1a;
+      color: #f1f5f9;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    #bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    #welcome-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #0d0a1a;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+      padding: 20px;
+      text-align: center;
+    }
+
+    #welcome-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .enter-btn {
+      margin-top: 25px;
+      padding: 16px 36px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #ffffff;
+      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(236, 72, 153, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .enter-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 15px 30px rgba(236, 72, 153, 0.6);
+    }
+
+    .glass-card {
+      position: relative;
+      z-index: 10;
+      max-width: 760px;
+      width: 100%;
+      background: rgba(23, 15, 38, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 28px;
+      padding: 50px 42px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    .header-badge {
+      display: inline-block;
+      padding: 8px 20px;
+      background: linear-gradient(90deg, rgba(236, 72, 153, 0.2), rgba(168, 85, 247, 0.2));
+      border: 1px solid rgba(236, 72, 153, 0.4);
+      border-radius: 20px;
+      font-size: 0.95rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #f472b6;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ff729f 0%, #a855f7 50%, #3b82f6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 30px;
+      letter-spacing: -0.5px;
+      text-align: center;
+    }
+
+    .message-body {
+      font-size: 1.25rem;
+      line-height: 1.9;
+      color: #f1f5f9;
+      text-align: justify;
+    }
+
+    .message-body p {
+      margin-bottom: 24px;
+    }
+
+    .song-dedication-box {
+      margin: 35px 0 25px 0;
+      background: linear-gradient(135deg, rgba(236, 72, 153, 0.08), rgba(139, 92, 246, 0.08));
+      border: 1px solid rgba(244, 114, 182, 0.25);
+      border-radius: 20px;
+      padding: 25px 30px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .song-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #f472b6;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .song-subtitle {
+      font-size: 1rem;
+      color: #94a3b8;
+      font-style: italic;
+    }
+
+    .footer-note {
+      text-align: center;
+      font-size: 1.05rem;
+      color: #cbd5e1;
+      margin-top: 30px;
+      padding-top: 25px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-style: italic;
+    }
+
+    @media (max-width: 600px) {
+      .glass-card {
+        padding: 35px 22px;
+      }
+      h1 {
+        font-size: 2.2rem;
+      }
+      .message-body {
+        font-size: 1.1rem;
+        line-height: 1.75;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="welcome-overlay">
+    <span class="header-badge">Para Jocelyn</span>
+    <h1 style="font-size: 2.2rem; margin-top: 12px;">Un mensaje importante</h1>
+    <button class="enter-btn" onclick="startExperience()">Abrir mensaje</button>
+  </div>
+
+  <canvas id="bg-canvas"></canvas>
+
+  <div class="glass-card">
+    <div style="text-align: center;">
+      <span class="header-badge">Mensaje sincero</span>
+      <h1>Jocelyn</h1>
+    </div>
+
+    <div class="message-body">
+      <p>Te escribo estas líneas con absoluta madurez y desde la reflexión que otorga la distancia. Reconozco con total honestidad que la falta de una comunicación oportuna y clara desgastó la confianza entre nosotros, lo que derivó en decisiones precipitadas de mi parte que jamás debieron suceder.</p>
+
+      <p>Asumo completamente la responsabilidad por mis equivocaciones pasadas. Habiendo analizado los hechos con serenidad y cabeza fría, comprendí que los desaciertos cometidos fueron producto de la confusión del momento, mas nunca de un desinterés real hacia ti.</p>
+
+      <p>Por más que intenté continuar con mi camino y dejar el pasado atrás, la realidad es que no he podido sacarte de mi vida ni de mi mente. Tu recuerdo sigue intacto y presente en mi día a día; entender que fuiste y sigues siendo una persona irreemplazable para mí es la razón por la que no puedo simplemente olvidarte.</p>
+
+      <p>Esta canción refleja precisamente esa presencia constante que mantienes en mis pensamientos y el sincero deseo de haber resuelto todo mediante el diálogo que nos debíamos. Mi intención no es invadir tu espacio ni condicionar tu tranquilidad, sino ofrecerte una disculpa formal, madura y transparente por todo lo ocurrido.</p>
+    </div>
+
+    <div class="song-dedication-box">
+      <div class="song-title">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="#f472b6"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+        <span>LATIN MAFIA — Te Estoy Correteando</span>
+      </div>
+      <div class="song-subtitle">
+        Dedicada especialmente para ti
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Si en algún momento consideras oportuno conversar con calma, siempre mantendré la disposición de escucharte.
+    </div>
+  </div>
+
+  <audio id="backgroundAudio" loop preload="auto">
+    <source src="te-estoy-correteando.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const audio = document.getElementById('backgroundAudio');
+    const overlay = document.getElementById('welcome-overlay');
+
+    function startExperience() {
+      overlay.classList.add('hidden');
+      audio.play().catch(error => console.log("Error al reproducir audio:", error));
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        audio.pause();
+      } else {
+        if (overlay.classList.contains('hidden')) {
+          audio.play();
+        }
+      }
+    });
+
+    window.addEventListener('beforeunload', () => {
+      audio.pause();
+    });
+
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let width, height;
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class GlowingOrb {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.radius = Math.random() * 180 + 100;
+        this.vx = (Math.random() - 0.5) * 0.4;
+        this.vy = (Math.random() - 0.5) * 0.4;
+        this.colorHue = Math.random() > 0.5 ? Math.random() * 40 + 320 : Math.random() * 60 + 220;
+        this.alpha = Math.random() * 0.25 + 0.15;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < -100 || this.x > width + 100 || this.y < -100 || this.y > height + 100) {
+          this.reset();
+        }
+      }
+
+      draw() {
+        const gradient = ctx.createRadialGradient(
+          this.x, this.y, 0,
+          this.x, this.y, this.radius
+        );
+        gradient.addColorStop(0, `hsla(${this.colorHue}, 80%, 60%, ${this.alpha})`);
+        gradient.addColorStop(1, `hsla(${this.colorHue}, 80%, 60%, 0)`);
+
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    const orbs = Array.from({ length: 6 }, () => new GlowingOrb());
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      orbs.forEach(orb => {
+        orb.update();
+        orb.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
